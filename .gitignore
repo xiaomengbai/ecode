@@ -12,3 +12,5 @@ m
 diff
 cal.pl
 tags
+bin/
+*.o

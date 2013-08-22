@@ -13,4 +13,4 @@ diff: $(DIFFOBJ)
 	$(CC) $(CFLAGS) $(DIFFOBJ) -o $(DIFFTARGET) 
 
 clean:
-	rm *.o  $(DIFFTARGET)
+	rm *.o  

@@ -15,4 +15,4 @@ main: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
 
 clean:
-	rm *.o $(TARGET) 
+	rm *.o 

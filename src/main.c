@@ -14,6 +14,7 @@
 /* #include "md5.h" */
 #include "hash.h"
 
+#include "args.h"
 
 void aligh_encode(struct ecode *e, FILE *f, size_t offset, size_t bsz);
 void check_coded_blk(struct meta *mt, char *dname);
@@ -42,22 +43,34 @@ int main(int argc, char *argv[])
     size_t cbsz;
     clock_t start, end;
     clock_t st, ed, acc = 0, acc2 = 0, acc3 = 0;
-   struct timeval tm_st, tm_ed;
-   struct timeval tm_st2, tm_ed2;
-   double acc_tm1 = 0, acc_tm2 = 0, acc_tm3 = 0;
+    struct timeval tm_st, tm_ed;
+    struct timeval tm_st2, tm_ed2;
+    double acc_tm1 = 0, acc_tm2 = 0, acc_tm3 = 0;
 #define DIFF_TIME_VAL(t1, t2) ({double diff = 0; diff = t2.tv_sec - t1.tv_sec; diff += (t2.tv_usec - t1.tv_usec) * 0.000001; diff;})
 
-    if(argc != 3)
-	 return 1;
+    /* if(argc != 3) */
+    /* 	 return 1; */
 
-    process = argv[1];
-    rfile = "a.out";
-    metafile = "m";
-    filename = "TMP";
-    output = "output";
-    n = 4;
-    m = 2;
-    csz = atol(argv[2]);//1024 * 1024 * 10;
+    store_args(argc, argv, &_args);
+    check_args(&_args);
+
+    /* process = argv[1]; */
+    process = _args.proc;
+    /* rfile = "a.out"; */
+    rfile = _args.input;
+    /* metafile = "m"; */
+    metafile = _args.meta;
+    /* filename = "TMP"; */
+    filename = _args.input;
+    /* output = "output"; */
+    output = _args.output;
+    /* n = 4; */
+    n = _args.n;
+    /* m = 2; */
+    m = _args.m;
+    /* csz = atol(argv[2]);//1024 * 1024 * 10; */
+    csz = _args.ec_size;
+
 
     printf("*** Expected Chunk Size: %lu ***\n", csz);
 
