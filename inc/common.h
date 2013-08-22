@@ -2,6 +2,8 @@
 #define COMMON_H
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
+
 typedef enum
 {
 	false = 0,
@@ -25,8 +27,6 @@ void* XMALLOC(size_t size);
 void* XREALLOC(void *p, size_t size);
 void PrintAllocatedBytes(void);
 #define XFREE(x)  do { if(NULL != x) free(x), x = NULL; }while(0)
-
-extern void *memcpy (void *dest, const void *src, size_t n);
 
 int Nstrlen(const char *str);
 bool isItFile(const char *name);
