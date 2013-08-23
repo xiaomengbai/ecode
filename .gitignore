@@ -14,3 +14,9 @@ cal.pl
 tags
 bin/
 *.o
+*.log
+*.aux
+*.blg
+*.dvi
+*.bbl
+summary.pdf

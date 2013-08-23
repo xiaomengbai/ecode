@@ -1,0 +1,96 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\begin{document}
+
+\begin{algorithm}
+\caption{Find Optimal Flag}
+\begin{algorithmic}[1]
+\Procedure{opt-flag}{$fps[fpnr], ecsz, m, T, S$}
+\State new $vs[2^m] \gets 0$
+\State new $last[2^m] \gets 0$
+\State new $vsnr[2^m] \gets 0$
+\State $minVar \gets -1$
+
+\State $i \gets 1$
+\While{$i \leq fpnr$}
+
+\For{$j \gets 1$ to $fpnr$ in $S$}
+    \If{$fps[j] \ge i$ and $fps[j] < i + T$}
+        \State $vsnr[fps[j]] \gets vsnr[fps[j]] + 1$
+        \State $vs[fps[j]] \gets vsnr[fps[j]] + (j - last[fps[j]] - ecsz)^2$
+        \State $last[fps[j]] \gets j$
+    \EndIf
+\EndFor
+
+\For{$k \gets i$ to $i + T - 1$}
+    \State $vsnr[k] \gets vsnr[k] + 1$
+    \State $vs[k] \gets vsnr[k] + (fpnr - last[k] - ecsz)^2$
+    \If{$minVar = -1$ or $minVar > \frac{vs[k]}{vsnr{k}}$}
+        \State $minVar \gets \frac{vs[k]}{vsnr{k}}$
+        \State $optFlag \gets k$
+    \EndIf
+\EndFor
+
+\State $i \gets i + T$
+\EndWhile
+
+\Return{$optFlag$}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                      
+\caption{Indexing Algorithm}          
+\begin{algorithmic}                    
+%  \REQUIRE FILE OLD-FLAG OLD-MASKBIT OLD-HASHES
+%  \REQUIRE window-size expected-chunk-size
+\Procedure{index-file}{$File, oldFlag, oldMaskBits, oldHashes, wsz, ecsz$}
+\State \Comment wsz is slide window size for Rabin fingerprints
+\State \Comment ecsz is the expected chunk size
+  \State $sz \gets File$ size          
+  \State $range \gets \frac{sz\ -\ wsz\ +\ 1}{\frac{sz}{ecsz}}$   
+  \State $maskBits \gets 0$
+
+  \While{$(1 << maskBits) < range$}
+      \State $maskBits \gets maskBits + 1$
+  \EndWhile
+
+  \If{$oldFlag$ is NULL \ or $oldMaskBits \neq maskBits$}
+      \State $fps[] \gets$ rabin-fingerprints($File, maskBits$)
+      \State $flag \gets$ opt-flag($fps[], ecsz, maskBits, t, s$)
+  \Else
+      \State $fps[] \gets$ rabin-fingerprints($File, oldMaskbits$)
+      \State $flag \gets oldFlag$
+  \EndIf
+
+
+  \State $hashes \gets$ NULL
+  \State $hash \gets$ NULL
+  \State $last \gets 0$
+  \ForAll{$fps[]$}
+      \If{$fps[i] = flag$}
+          \State $hash \gets $ MD5($File, last, i$)
+          \State push $hash$ into $hashes$
+          \State $last \gets i$
+      \EndIf
+  \EndFor
+
+%  \COMMENT{find out blocks needed reencoding}
+  \ForAll{$hashes$}
+      \ForAll{$oldHashes$}
+          \If{$hashes[i] = oldHashes[i]$}
+              \State mark $i$th block need re-encoding
+              \State break
+          \EndIf
+      \EndFor
+  \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\end{document}

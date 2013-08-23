@@ -1,0 +1,241 @@
+
+@Comment This is a Sample from wiki
+@Comment type{citation key,    % loosely the author's name concatenating year
+@Comment BibTex keywords = value
+@Comment }
+@Comment ===========================
+@Comment  entry types:
+@Comment  -----------
+@Comment  article: author title journal year
+@Comment  book: author/editor title publisher year
+@Comment  booklet: title
+@Comment  coference/inproceedings: author title booktitle year
+@Comment  inbook: author/editor title chapter/pages publisher year
+@Comment  incollection: author title booktitle publisher year
+@Comment  manual: title
+@Comment  masterthesis: author title school year
+@Comment  misc: none
+@Comment  phdthesis: author title school year
+@Comment  proceedings: title year
+@Comment  techreport: author title institution year
+@Comment  unpublished: author title note
+@Comment ===========================
+@Comment keywords:
+@Comment -----------
+@Comment  address annote author booktitle chapter crossref edition editor
+@Comment  eprint howpublished institution journal key month note number organization
+@Comment  pages publisher school series title type url volume year
+@Comment ===========================
+
+@Comment To add bib in Latex:
+@Comment \bibliographystyle{plain}     % plain is plain.bst
+@Comment \bibliography{sample1,sample2,...samplen}   % no blank space, sample1 is sample1.bib, or this could be path/to/sample1
+
+@Comment This two lines should be placed just before \end{document}
+
+@Comment To cite refs:
+@Comment \cite{ref_key1, ref_key2}
+
+@Comment To make dvi/pdf:
+@Comment latex latex_source_code.tex
+@Comment bibtex latex_source_code.aux
+@Comment latex latex_source_code.tex
+@Comment latex latex_source_code.tex
+
+@Comment or
+
+@Comment pdflatex latex_source_code.tex
+@Comment bibtex latex_source_code.aux
+@Comment pdflatex latex_source_code.tex
+@Comment pdflatex latex_source_code.tex
+
+@article{greenwade93, 
+author = "George D. Greenwade",
+title = "The {C}omprehensive {T}ex {A}chive {N}etwork ({CTAN})",
+year = "1993",
+journal = "TUGBoat",
+volume = "14",
+number = "3", 
+pages = "342--351"
+}
+
+@conference{huang05,
+author = "Cheng Huang and Lihao Xu",
+title = "{STAR}: An Efficient Coding Scheme for Correcting Triple Storage Node Failures",
+booktitle = "FAST '05",
+year = "2005"
+}
+
+@conference{hafner05,
+author = "James Lee Hafner",
+title = "{WEAVER} Codes: Highly Fault Tolerant Erasure Codes for Storage Systems",
+booktitle = "FAST '05",
+year = "2005"
+}
+
+@article{menon95,
+author = "Blaum, M. and Brady, J. and Bruck, J. and Jai Menon",
+title = "{EVENODD}: an efficient scheme for tolerating double disk failures in RAID architectures",
+journal = "Computers, IEEE Transactions",
+year = "1995",
+volume = "44",
+number = "2"
+}
+
+@article{reed60,
+author = "I. S. Reed and G. Solomon",
+title = "Polynomial Codes Over Certain Finite Fields",
+journal = "Journal of the Society for Industrial and Applied Mathematics",
+year = "1960",
+volume = "8",
+number = "2",
+pages = "300--304"
+}
+
+@inproceedings{luby97,
+ author = {Luby, Michael G. and Mitzenmacher, Michael and Shokrollahi, M. Amin and Spielman, Daniel A. and Stemann, Volker},
+ title = {Practical loss-resilient codes},
+ booktitle = {Proceedings of the twenty-ninth annual ACM symposium on Theory of computing},
+ series = {STOC '97},
+ year = {1997},
+ isbn = {0-89791-888-6},
+ location = {El Paso, Texas, USA},
+ pages = {150--159},
+ numpages = {10},
+ url = {http://doi.acm.org/10.1145/258533.258573},
+ doi = {10.1145/258533.258573},
+ acmid = {258573},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
+@MISC{gallager63,
+    author = {Robert G. Gallager},
+    title = {Low-Density Parity-Check Codes},
+    year = {1963}
+}
+
+@inproceedings{byers98,
+ author = {Byers, John W. and Luby, Michael and Mitzenmacher, Michael and Rege, Ashutosh},
+ title = {A digital fountain approach to reliable distribution of bulk data},
+ booktitle = {Proceedings of the ACM SIGCOMM '98 conference on Applications, technologies, architectures, and protocols for computer communication},
+ series = {SIGCOMM '98},
+ year = {1998},
+ isbn = {1-58113-003-1},
+ location = {Vancouver, British Columbia, Canada},
+ pages = {56--67},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/285237.285258},
+ doi = {10.1145/285237.285258},
+ acmid = {285258},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
+@inproceedings{woitaszek07,
+      Address = {San Diego, California, USA},
+      Author = {Woitaszek, Matthew and Tufo, Henry M.},
+      Booktitle = {MSST 2007: Proceedings of the IEEE / NASA Goddard Conference on Mass Storage Systems and Technologies},
+      Doi = {http://doi.ieeecomputersociety.org/10.1109/MSST.2007.33},
+      Isbn = {0-7695-3025-7},
+      Month = {September},
+      Note = {Short paper and poster.},
+      Pages = {221-226},
+      Title = {Tornado Codes for {MAID} Archival Storage},
+      Year = {2007},
+}
+
+@ARTICLE{chen94,
+    author = {Peter M. Chen and Edward K. Lee and Garth A. Gibson and Randy H. Katz and David A. Patterson},
+    title = {RAID: High-Performance, Reliable Secondary Storage},
+    journal = {ACM Computing Surveys},
+    year = {1994},
+    volume = {26},
+    pages = {145--185}
+}
+
+
+@techreport{blomer07,
+    author = {Bl\"{o}mer, Johannes and Kalfane, Malik and Karpinski, Marek and Karp, Richard and Luby, Michael and Zuckerman, David},
+    citeulike-article-id = {1825299},
+    citeulike-linkout-0 = {http://www.icsi.berkeley.edu/cgi-bin/pubs/publication.pl?ID=000988},
+    institution = {International Computer Science Institute},
+    keywords = {finite-field},
+    month = aug,
+    number = {TR-95-048},
+    posted-at = {2007-10-26 15:32:11},
+    priority = {2},
+    title = {{An XOR-Based Erasure-Resilient Coding Scheme}},
+    url = {http://www.icsi.berkeley.edu/cgi-bin/pubs/publication.pl?ID=000988},
+    year = {1995}
+}
+
+@INPROCEEDINGS{plank13,
+        author = "J. S. Plank and K. M. Greenan and E. L. Miller",
+        title = "Screaming Fast {G}alois {F}ield Arithmetic Using {I}ntel {SIMD} Instructions",
+        booktitle = "FAST-2013: 11th Usenix Conference on File and Storage Technologies",
+        month = "February",
+        year = "2013",
+        address = "San Jose",
+        where = "http://www.usenix.org/events/fast13,http://web.eecs.utk.edu/~plank/plank/papers/FAST-2013-GF.html"
+}
+
+@inproceedings{huang12,
+ author = {Huang, Cheng and Simitci, Huseyin and Xu, Yikang and Ogus, Aaron and Calder, Brad and Gopalan, Parikshit and Li, Jin and Yekhanin, Sergey},
+ title = {Erasure coding in windows azure storage},
+ booktitle = {Proceedings of the 2012 USENIX conference on Annual Technical Conference},
+ series = {USENIX ATC'12},
+ year = {2012},
+ location = {Boston, MA},
+ pages = {2--2},
+ numpages = {1},
+ url = {http://dl.acm.org/citation.cfm?id=2342821.2342823},
+ acmid = {2342823},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+} 
+
+@TECHREPORT{bindel00,
+    author = {David Bindel and Yan Chen and Patrick Eaton and Dennis Geels and Ramakrishna Gummadi and Sean Rhea and Hakim Weatherspoon and Westley Weimer and Christopher Wells and Ben Zhao and John Kubiatowicz},
+    title = {OceanStore: An Extremely Wide-Area Storage System},
+    institution = {},
+    year = {2000}
+}
+
+@conference{ghemawat03,
+ author = {Ghemawat, Sanjay and Gobioff, Howard and Leung, Shun-Tak},
+ title = {The Google file system},
+ booktitle = {Proceedings of the nineteenth ACM symposium on Operating systems principles},
+ series = {SOSP '03},
+ year = {2003},
+ isbn = {1-58113-757-5},
+ location = {Bolton Landing, NY, USA},
+ pages = {29--43},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/945445.945450},
+ doi = {10.1145/945445.945450},
+ acmid = {945450},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {clustered storage, data storage, fault tolerance, scalability},
+} 
+
+@INPROCEEDINGS{kbp12,
+        author = "O. Khan and R. Burns and J. S. Plank and W. Pierce and C. Huang",
+        title = "Rethinking Erasure Codes for Cloud File Systems: Minimizing {I/O} for Recovery and Degraded Reads",
+        booktitle = "FAST-2012: 10th Usenix Conference on File and Storage Technologies",
+        month = "February",
+        year = "2012",
+        address = "San Jose",
+        where = "http://web.eecs.utk.edu/~plank/plank/papers/FAST-2012.html"
+}
+
+@INPROCEEDINGS{pbh13,
+        author = "J. S. Plank and M. Blaum and J. L. Hafner",
+        title = "{SD} Codes: Erasure Codes Designed for How Storage Systems Really Fail",
+        booktitle = "FAST-2013: 11th Usenix Conference on File and Storage Technologies",
+        month = "February",
+        year = "2013",
+        address = "San Jose",
+        where = "http://www.usenix.org/events/fast13,http://web.eecs.utk.edu/~plank/plank/papers/FAST-2013-SD.html"
+}

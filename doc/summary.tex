@@ -1,0 +1,92 @@
+\documentclass[a4paper, 12pt]{article}
+\begin{document}
+
+
+\section{Code types}
+Basically the erasure codes fall into two types:
+\begin{enumerate}
+\item
+  MDS(Maximum Distance Separable) code
+\item
+  non-MDS code
+\end{enumerate}
+MDS code has typically been used in RAID-5 and RAID-6 system, where
+any 1/2 disk failures are recoverable in N+1/2 disks. In this case,
+the XOR-based family code is mainly applied. However, Reed-Solomon\cite{reed60}
+code is more general type of erasure code. In fact, both of them are
+based on Galois Field computation. While the RS code is not restrict
+in certain GF, XOR-based code is actually computed in GF(2), which
+means its code word length is $1$. To achieve the effect of recovering
+original $n$ code words from $n + m$ coded words, erasure code has to
+construct $(m + n) \times n$ matrix for encoding. And also this matrix
+must be inversible. The first kind of constructing matrix is using
+Vandermonde matrix. For $GF(2^m)$, it could construct useful matrix
+for at most $2^m - 1$ code words. Another way is to replace the first
+$n \times n$ matrix as identity matrix. In addition to relieve
+computational cost, it could help XOR-based code construct inversible
+matrix rather than Vandermonde matrix. 
+
+On the other hand, erasure code can sacrifice some storage efficiency
+to reach same reliability as MDS code. Low-Density Parity-Check(LDPC)
+code was mentioned in \cite{luby97, gallager63}. Network system can
+usuallly take advantage of this feature\cite{byers98}. And recently
+some efforts were made on putting this code method to small scale,
+e.g. local file system\cite{woitaszek07, hafner05}. 
+
+\section{Performance}
+The most significant performance of erasure code is definitely
+encoding/decoding throughput. Galois Field multipication and addition
+are major factor of impacting coding process, where obviously the
+multiplication operations dominates the additions. The most simple way
+improving performance it to cancel the muliplication. Limiting the
+code word in $1$ bit leads to the XOR-based family codes. But the
+XOR-based codes have only constant parities. Intially 1 parity in
+RAID-5\cite{chen94}, then 2 in \cite{menon95}, at most 3 in
+\cite{huang05} if we wish to keep MDS characteristic. Applying Cauchy
+matrix\cite{blomer07} can convert all multiplications into additions,
+and this can be applied in classic RS code. A second way is to keep a
+multiplication table in memory. Then multiplication operation would be
+simplified to a step of memory access. But we can only apply this
+technique in code word smaller than $16$. In the case of code word
+$16$, the full table would consume $4$GB memory. And even by
+manipulating data structure we can shrink the table size, it is still
+not realistic in larger code word than $16$. The third way relies on
+the hardware implementation to improving Galois Field
+multiplications\cite{plank13}.  
+
+The reason why erasure code can surpass replication is excellent
+storage efficiency. MDS undoubtly reach the optimal storage
+effeciency. But sometime, we don't need the highest efficiency in
+practical. If there is some other performance more considerable, the
+storage effeciency can be sacrificed. Typically the LDPC code
+make a tradeoff between storage efficiency and reliability. In Windows
+Azure, people prefer the less bandwidth of reconstructing parities to
+storage efficiency\cite{huang12}. 
+
+\section{Application}
+Although erasure code origninates from error correcting code in
+network transmission, it is widely used in the current scenarioes of
+distributed storage system for backup,e.g. OceanStore \cite{bindel00}.
+Emerging cloud services,such as Window Azure and Google File System,
+also incline to utilize erasure code for reliability\cite{huang12,ghemawat03}. 
+In cloud environment of large scale storage, data chunks are usually
+considered as appending only format. Compared to update effeciency
+toward coded data, the service providers prefer focusing on rapidly
+regenerating(e.g., reducing I/O in recovery process) coded blocks
+\cite{kbp12, huang12} or improving storage effeciency by taking
+advantage of characteristics of cloud\cite{pbh13}. 
+
+RAID system is another field that need erasure code for storage
+reliability. Considering highly frequent write/read operations on
+disks, RAID system relatively intends to fast updates performance in
+coded data. For this reason, XOR-based erasure code family is the most
+appropriate option. While XOR-based code family may improve encode and
+decode performance, RAID have to keep at most 3 parities to provide
+optimal storage efficiency.
+
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}
