@@ -1,6 +1,7 @@
 texsource=summary
 bibsource=ref.bib
-dvi: $(texsource).tex $(bibsource)
+cleanfile=*.dvi *.pdf *.log *.aux *.blg *.bbl
+dvi: $(texsource).tex $(bibsource) 
 	latex $(texsource)
 	bibtex $(texsource)
 	latex $(texsource)
@@ -11,3 +12,5 @@ pdf: $(texsource).tex $(bibsource)
 	bibtex $(texsource)
 	pdflatex $(texsource)
 	pdflatex $(texsource)
+clean:
+	-rm $(cleanfile)
