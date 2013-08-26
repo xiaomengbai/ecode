@@ -20,3 +20,5 @@ bin/
 *.dvi
 *.bbl
 summary.pdf
+intro.pdf
+*.pdf

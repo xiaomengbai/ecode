@@ -1,0 +1,118 @@
+\documentclass[a4paper, 12pt]{article}
+\begin{document}
+
+\section{Introduction}
+
+Although erasure code originates from error correcting code in network
+transmission, it is widely deployed in current storage system for
+backup purpose. A typical field taking advanged of erasure code is
+RAID system. RAID-5 and RAID-6 generates one or two more parity disks
+and gains higher storage efficiency than replication policy. RAID
+system usually apply XOR-based code for considering simplicity and
+update performance. Until now, RAID system can hold at most three
+parity disks with characterisitics of MDS.
+
+Emerging cloud environment raises another scenario fitting erasure
+code. In the cloud, storage of massive data also need high
+reliability. And the extra storage for reliability is considerable
+because of its scale. Rather than erasure code, mirroring policy has
+less flexibility and would occupy comparable more space. In the case
+of cloud storage, big data is separated from user-level logical
+sense. And it is unified as appending only stream-like data. Once the
+incoming data achieves some threshold, it is sealed as a block for
+next encoding. While there is no or trivial write operation towards
+this blocks, it is undoubtly efficient in using general erasure code,
+e.g. RS-code, without taking its high computational cost into
+account. More excitingly, the RS code gets high flexibility, and fits
+the cloud environment well.  
+
+As a tradeoff from highest storage efficiency, erasure code brings
+relatively high computational cost in coding process. Then the
+deployment of erasure code is usually below the file system, which supplys
+normal services to users, to avoid this cost. In RAID system, the
+modification would be located in several strips because of the fixed
+disk capacity. Cloud service doesn't need considering this for their
+append only data.
+
+By applying erasure code in user-level, users is able to customized
+reliability of their data. Rather than usage mentioned before, this
+reliability can be hold intra file systems. On the other hand, users
+gain more security on their data: 1) using suitable coding method
+would encrypt their data and 2) users could safely entrust untrusted
+service provider keeping their data in quota of pieces below recovering
+threshold. 
+
+The update efficiency is the most significant challenge to applying
+erasure code in user-level. Single byte insertion at head of file
+might lead to re-encoding the entire file. Although XOR-based codes
+get high performance in update process, these family codes keep
+original file content in coded data and lose some degree of
+security. Also its reliability is too low while we have at most three
+parities. In this paper, We introduce a novel code method to improve
+update performance. Using indexing technique, our code method can
+dramatically reduce re-encoding overhead. Moreover, using high
+computational cost code type, such as Reed-Solomon code, would not
+affect update performance obviously. Then arbitary fault tolerance is
+acceptable.
+
+
+%% Although erasure code origninates from error correcting code in
+%% network transmission, it is widely used in the current scenarioes of
+%% distributed storage system for backup. Emerging cloud storge services,
+%% such as Window Azure Storage and Google File System, also incline to
+%% use erasure code for reliability. In cloud environment of large scale
+%% storage, data chunks are usually considered as appending only
+%% format. Compared to update effeciency toward coded data, the service
+%% providers prefer focusing on rapidly regenerating(e.g., reducing I/O
+%% in such recovery process) coded blocks against devices failures
+%% appearing in data center.
+
+%% RAID system is another field that need erasure code for storage
+%% reliability. Considering highly frequent write/read operations on
+%% disks, RAID system relatively intends to fast updates performance in
+%% coded data. For this reason, XOR-based erasure code family is the most
+%% appropriate option. While XOR-based code family may improve encode and
+%% decode performance, RAID have to keep at most 3 parities to provide
+%% optimal storage efficiency, which means Maximum Distance Separatable. 
+
+%% The features of erasure code make this techinique very suitable for
+%% cloud storage service. Users can use basic characteristics of erasure
+%% code to break their files and distribute them into different cloud
+%% storage services. Rather than simple mirroring method, users can
+%% achieve arbitary storage efficiency. Moreover, security would be
+%% guaranteed while single service provider is unable to access complete
+%% data from just pieces. If specific kind of erasure code, such as
+%% Reed-Solomon code, is applied, the data pieces are fully encoded and
+%% leak nothing to service providers. 
+
+
+
+
+
+
+%% Our code method can be characterized as two independent phases: 1)
+%% indexing process attempts to divide user file into chunks. Then we
+%% check if there are chunks which have not been encoded. These chunks
+%% would be tagged for coming encoding in next step. We apply Rabin
+%% fingerprint technique as indexing technique in this phase.  2)
+%% Encoding process only encode blocks which are tagged as "not encoded"
+%% in last phase. All kinds of erasure codes are valid in our code
+%% method.
+
+
+%% This first indexing process would localize minor modification in $1~2$
+%% chunks due to original file has been partitioned into pieces. And the
+%% Indexing algorithm consumes much less time in re-indexing file rather
+%% than re-encoding the entire file. Then in this policy, erasue codes
+%% with highly computational cost, e.g. RS code, may gain most benefits. 
+
+
+%% Our code method have to keep meta file for future encoding/decoding,
+%% which includes generator matrix, index flag, and all existing chunks
+%% information(e.g., position, size, hash value). Another challenge is we
+%% need to divide the whole file more appropriately in indexing
+%% phase. Only the file is divided almost evenly, we can minimize the
+%% overhead of re-encode process. We apply several techniques for this 
+%% purpose. 
+
+\end{document}
