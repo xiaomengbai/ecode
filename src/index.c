@@ -85,6 +85,8 @@ void *thread_cal_var(void *arg)
 
 }
 
+static int _window_size;
+
 void index_file(struct meta *mt, char *fname, size_t csz)
 {
     FP_T flag, tfp;
@@ -118,6 +120,7 @@ void index_file(struct meta *mt, char *fname, size_t csz)
 	mt->ra.mask = mask;
 	/* RF_BUF(b, sz, mt->ra.wsz, mt->ra.mask, &fp); */
 	fps = RF_BUF_N(b, sz, mt->ra.wsz, mt->ra.mask, &fps_nr);
+	_window_size = mt->ra.wsz;
 	tps = malloc(sizeof(unsigned) * fps_nr);
 	memset(tps, 1, sizeof(unsigned) * fps_nr);
 	ed = clock();
@@ -126,7 +129,10 @@ void index_file(struct meta *mt, char *fname, size_t csz)
 	printf("Calculating new flag...\n");
 	st = clock();
 	/* mt->ra.flag = opt_fp(&fp, csz, mt->ra.mask); */
+
 	mt->ra.flag = opt_fp(fps, fps_nr, tps, csz, mt->ra.mask);
+	/* mt->ra.flag = 0; */
+
 	/* mt->ra.flag = opt_fp_t(fps, fps_nr, tps, csz, mt->ra.mask); */
 	ed = clock();
 	acc_4 += (ed - st);
@@ -134,6 +140,7 @@ void index_file(struct meta *mt, char *fname, size_t csz)
     }else{
 	/* RF_BUF(b, sz, mt->ra.wsz, mt->ra.mask, &fp); */
 	fps = RF_BUF_N(b, sz, mt->ra.wsz, mt->ra.mask, &fps_nr);
+	_window_size = mt->ra.wsz;
 	ed = clock();
 	acc_1 += (ed - st);
 	printf("done\n");
@@ -266,9 +273,9 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
     unsigned range = 1, cand, j, loop, step, s;
     long i;
     double minvar = -1, var;
-    unsigned *vs;
     /* int minvar=-1, var; */
     /* unsigned *vs; */
+    double *vs;
     unsigned *last, *vsnr;
     int r_st, r_ed;
 
@@ -286,14 +293,14 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
 /*     r = (range > SHARE ? SHARE : range); */
     printf(" -Candidate Range (0 - %u)\n", range);
     
-    vs = malloc(sizeof(unsigned) * range);
+    vs = malloc(sizeof(double) * range);
     last = malloc(sizeof(unsigned) * range);
     vsnr = malloc(sizeof(unsigned) * range);
 
 
     assert(vs != NULL && last != NULL && vsnr != NULL);
     
-    memset(vs, 0, sizeof(unsigned) * range);
+    memset(vs, 0, sizeof(double) * range);
     memset(last, 0, sizeof(unsigned) * range);
     memset(vsnr, 0, sizeof(unsigned) * range);
 
@@ -308,7 +315,7 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
     loop = fps_nr;
     step = fps_nr / (range * 9);
     if(step == 0) step = 1;
-    step = 2;
+    step = 1;
     printf("  --sample fps in step %u\n", step);
     s = 0;
     st = clock();
@@ -324,13 +331,17 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
 	if(t < r_st || t >= r_ed)
 	    continue;
 
+	if(i - last[t] < _window_size)
+	    continue;
+
 	vsnr[t]++;
 /* 	vsnr[fps[i+1]]++; */
 /* 	vsnr[fps[i+2]]++; */
 /* 	vsnr[fps[i+3]]++; */
 	/* vs[fp->e[i]] += labs((long)(i - last[fp->e[i]]) - (long)sz); */
 /* 	vs[t] += labs((i - last[t]) - sz); */
-	vs[t] += ((long)((i - last[t]) -sz) * ((i - last[t]) - sz));
+	/* vs[t] += ((long)((i - last[t]) -sz) * ((i - last[t]) - sz)); */
+	vs[t] += pow((i - (long)last[t] - (long)sz), 2);
 /* 	vs[fps[i+1]] += ((long)((i - last[fps[i+1]]) -sz) * ((i - last[fps[i+1]]) - sz)); */
 /* 	vs[fps[i+2]] += ((long)((i - last[fps[i+2]]) -sz) * ((i - last[fps[i+2]]) - sz)); */
 /* 	vs[fps[i+3]] += ((long)((i - last[fps[i+3]]) -sz) * ((i - last[fps[i+3]]) - sz)); */
@@ -348,11 +359,11 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
     for(i = j * r; i < ((j + 1) * r < range ? (j + 1) * r : range); i++){
 	 vsnr[i]++;
 	 /* vs[i] += labs((long)(fp->nr - last[i]) - (long)sz); */
-	 vs[i] += pow((long)(fps_nr - last[i]) - (long)sz, 2);
+	 vs[i] += pow((long)fps_nr - (long)last[i] - (long)sz, 2);
 
 	if(vsnr[i] == 0)
 	    continue;
-	var = sqrt(vs[i]) / vsnr[i];
+	var = sqrt(vs[i] * 1.0 / vsnr[i]);
 
 	if(minvar == -1 || var < minvar){
 	      minvar = var;
@@ -368,6 +379,15 @@ static FP_T opt_fp(unsigned *fps, int fps_nr, unsigned *tps, /* size_t */long sz
     ted = clock();
     printf(" -Total time: %lu(%.2f s)\n", ted - tst, (ted - tst) * 1.0 / CLOCKS_PER_SEC);
     printf(" -Optimal flag: %u(%f)\n", cand, minvar);
+    printf(" -Random flag: 0(%f)\n", sqrt(vs[0]/vsnr[0]));
+
+    /* printf("Flag position[%u]: ", vsnr[cand]); */
+    /* for(i = 0; i < fps_nr; i++){ */
+    /* 	if(fps[i] == cand){ */
+    /* 	    printf("%ld, ", i); */
+    /* 	} */
+    /* } */
+    /* printf("\n"); */
 
     free(last);
     free(vs);

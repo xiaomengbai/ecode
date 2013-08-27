@@ -21,6 +21,8 @@ void check_coded_blk(struct meta *mt, char *dname);
 
 /* unsigned long long get_hash(char *b, size_t sz); */
 
+static int _window_size;
+
 int main(int argc, char *argv[])
 {
     char *metafile = NULL;
@@ -131,8 +133,10 @@ int main(int argc, char *argv[])
 	}
 
 	gettimeofday(&tm_st, NULL);
+	_window_size = (int)(0.001 * _args.ec_size);
+	if(_window_size < 8) _window_size = 8;
 	if(!metafile || !(mt = read_meta(metafile)))
-	    mt = init_meta(filename, n, m, 8);
+	    mt = init_meta(filename, n, m, _window_size);
 	gettimeofday(&tm_ed, NULL);
 	printf("Read meta file: %.2fs\n", DIFF_TIME_VAL(tm_st, tm_ed));
 
