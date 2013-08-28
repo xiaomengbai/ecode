@@ -1,0 +1,47 @@
+\documentclass[a4paper, 12pt]{article}
+\begin{document}
+
+\section{Index}
+
+To relieve the overhead of coding process, the simplest method is to
+cut file into chunks and locate the modification in limited
+range. However, this method is not appropriate in the case of frequent
+random writes. Firstly, it is hard to get a good initial chunk
+capacity if the size of file is always changing. Random writes might
+extend some chunks extremely. Then locating modification in the file
+is unrealistic. 
+
+We use Rabin fingerprints to anchor some points for next division just
+like \cite{index}. Rabin fingerprints is technique of extracting
+features of data stream. It calculates all fingerprints of fixed $w$
+bytes of $B_i, B_{i+1}, ... B_{i+w-1}$ in the stream, and advantage of
+this technique is calculation of fingerprint on $B_{i+1}, B_{i+2},
+... B_{i+w}$ could be simplified based on the former result. When we
+let these fingerprints modulo a small number $2^m, m = 1, 2, ...$, and
+set some determinate number as flag. We get a natural method of
+1) dividing files without too high variance and 2) minor modification
+would not affect amounts of chunks. We can adjust the number of $2^m$
+to control expected chunk size $esz$. Obviously the less $2^m$ is, the
+$esz$ is less if we consider the fingerprints as unifrom random
+distribution. 
+
+The number $2^m$ is calculated by the $exz$, $w$ and the total file
+size $fsz$, where $m = ...$. 
+
+The optimal solution is choosing the flag which could cut chunks in
+least variance to $esz$. This process of finding such optimal flag
+cost significant time if the amounts of fingerprints are large,
+especially out of the cache size. 
+
+experiment.
+
+After cutting the whole file, it is necessary to hash all chunks in
+finding out which are modified. The old hash values are kept in the
+meta file and these are caculated from MD5. Once the new hash values
+are not found in meta file, corresponding chunks would be marked as
+they should be encoded in next step. 
+
+
+
+
+\end{document}
